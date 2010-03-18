@@ -5,8 +5,26 @@
 # See the file LICENSE.txt for details.
 #++
 
-require 'spec/rake/spectask'
-require 'spec/rake/verify_rcov'
+# Require lines we need to run with the gem that provides them
+#
+required = {:rspec  => 'spec/rake/spectask', 
+            :rcov   => 'spec/rake/verify_rcov', 
+            :hoe    => 'hoe'}
+
+not_found = []
+
+required.each do |gem, req|
+  begin
+    require req
+  rescue LoadError
+    not_found << gem
+  end
+end
+
+unless not_found.empty?
+  puts "To run the rake tasks you must have the following gem#{'s' if not_found.length > 1} installed: #{not_found.join(',')}"
+  exit
+end
 
 MANIFEST = FileList["History.txt", "Manifest.txt", "README.txt",
                     "LICENSE.txt", "Rakefile", "*.erb", "*.rb", "bin/*",
@@ -15,7 +33,6 @@ MANIFEST = FileList["History.txt", "Manifest.txt", "README.txt",
 
 begin
   File.open("Manifest.txt", "w") {|f| MANIFEST.each {|n| f << "#{n}\n"} }
-  require 'hoe'
   require File.dirname(__FILE__) + '/lib/warbler/version'
   hoe = Hoe.spec("warbler") do |p|
     p.version = Warbler::VERSION
@@ -63,8 +80,9 @@ end
 
 task :default => :spec
 
-if defined?(JRUBY_VERSION)
-  require 'ant'
+# Allow rake tasks to run from JRuby 1.4.x. Require won't allow an inline the rescue here
+#
+if defined?(JRUBY_VERSION) && (begin; require 'ant'; rescue LoadError; nil end)
   directory "pkg/classes"
   task :compile => "pkg/classes" do |t|
     ant.javac :srcdir => "ext", :destdir => t.prerequisites.first,
