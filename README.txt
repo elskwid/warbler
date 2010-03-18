@@ -132,6 +132,27 @@ You can get the Warbler source using Git, in any of the following ways:
 You can also download a tarball of Warbler source at
 http://github.com/nicksieger/warbler/tree/master.
 
+=== Buidling the Gem
+
+Using the rake task you can build the Warbler gem:
+
+  rake gem
+
+To run any of the rake tasks you will need the following gems installed:
+
+  - rspec
+  - rcov
+  - hoe
+
+=== Installing the Gem
+
+To install Warbler (with gem install warbler) you will need the jruby-rack gem 
+installed, which can currently only be installed locally after building 
+jruby-rack yourself.
+
+See the JRuby-Rack project at:
+http://github.com/nicksieger/jruby-rack
+
 == License
 
 Warbler is provided under the terms of the MIT license.
