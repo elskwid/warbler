@@ -350,6 +350,18 @@ describe Warbler::War do
     @config.webxml.jruby.max.runtimes.should == 1
   end
 
+  it "should not set the jruby max runtimes with versions of Rails that have deprecated configuration options" do
+    task :environment do
+      rails = mock_rails_module
+      config = mock "config"
+      rails.stub!(:configuration).and_return(config)
+      config.stub!(:threadsafe!)
+    end
+    @config = Warbler::Config.new
+    @config.webxml.booter.should == :rails
+    @config.webxml.jruby.should_not respond_to(:max)
+  end
+
   it "should skip directories that don't exist in config.dirs and print a warning" do
     @config.dirs = %w(lib notexist)
     silence { @war.apply(@config) }

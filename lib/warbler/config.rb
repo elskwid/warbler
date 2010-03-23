@@ -225,7 +225,8 @@ module Warbler
         Rails.configuration.gems.each {|g| @gems << Gem::Dependency.new(g.name, g.requirement) }
       end
       if defined?(Rails.configuration.threadsafe!) &&
-          Rails.configuration.allow_concurrency && Rails.configuration.preload_frameworks
+          (defined?(Rails.configuration.allow_concurrency) && Rails.configuration.allow_concurrency) && 
+          Rails.configuration.preload_frameworks
         @webxml.jruby.max.runtimes = 1
       end
       true
