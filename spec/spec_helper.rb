@@ -14,6 +14,9 @@ require 'warbler'
 raise %{Error: detected running Warbler specs in a Rails app;
 Warbler specs are destructive to application directories.} if File.directory?("app")
 
+@@pwd = Dir.getwd
+@@sample_dir = File.expand_path(File.join(@@pwd, "spec/sample"))
+
 def silence(io = nil)
   require 'stringio'
   old_stdout = $stdout

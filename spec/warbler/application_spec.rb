@@ -10,8 +10,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 describe Warbler::Application do
   before :each do
     verbose(false)
-    @pwd = Dir.getwd
-    Dir.chdir("spec/sample")
+    Dir.chdir(@@sample_dir)
     @argv = ARGV.dup
     ARGV.clear
     @app = Rake.application
@@ -26,7 +25,7 @@ describe Warbler::Application do
     Warbler.application = nil
     Warbler.framework_detection = @detection
     @argv.reverse.each {|a| ARGV.unshift a}
-    Dir.chdir(@pwd)
+    Dir.chdir(@@sample_dir)
   end
 
   it "should be able to list its tasks" do

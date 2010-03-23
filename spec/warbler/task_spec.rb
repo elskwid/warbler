@@ -12,8 +12,7 @@ describe Warbler::Task do
     @rake = Rake::Application.new
     Rake.application = @rake
     verbose(false)
-    @pwd = Dir.getwd
-    Dir.chdir("spec/sample")
+    Dir.chdir(@@sample_dir)
     mkdir_p "log"
     touch "log/test.log"
     @config = Warbler::Config.new do |config|
@@ -28,7 +27,7 @@ describe Warbler::Task do
     Rake::Task["warble:clean"].invoke
     rm_rf "log"
     rm_f FileList["config.ru", "*web.xml", "config/web.xml*", "config/warble.rb", "file.txt", 'manifest', 'Gemfile']
-    Dir.chdir(@pwd)
+    Dir.chdir(@@sample_dir)
   end
 
   it "should define a clean task for removing the war file" do
